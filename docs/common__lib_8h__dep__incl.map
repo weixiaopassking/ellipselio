@@ -1,0 +1,11 @@
+<map id="include/common_lib.h" name="include/common_lib.h">
+<area shape="rect" id="node1" title="Common type definitions, constants, and utility functions for EllipseLIO." alt="" coords="283,5,448,32"/>
+<area shape="rect" id="node2" href="$cam__processing_8h.html" title="Camera image processing and color projection to LiDAR points." alt="" coords="203,80,394,107"/>
+<area shape="rect" id="node3" href="$imu__processing_8h.html" title="IMU sensor processing with EKF integration and temporal synchronization." alt="" coords="5,155,192,181"/>
+<area shape="rect" id="node4" href="$map__processing_8h.html" title="Main mapping and localization node for LiDAR&#45;inertial odometry." alt="" coords="337,229,527,256"/>
+<area shape="rect" id="node8" href="$lidar__processing_8h.html" title="LiDAR point cloud processing with vendor&#45;specific support." alt="" coords="470,80,661,107"/>
+<area shape="rect" id="node7" href="$cam__processing_8cpp_source.html" title=" " alt="" coords="217,155,394,181"/>
+<area shape="rect" id="node6" href="$imu__processing_8cpp_source.html" title=" " alt="" coords="11,229,186,256"/>
+<area shape="rect" id="node5" href="$map__processing_8cpp_source.html" title=" " alt="" coords="343,304,521,331"/>
+<area shape="rect" id="node9" href="$lidar__processing_8cpp_source.html" title=" " alt="" coords="520,155,699,181"/>
+</map>

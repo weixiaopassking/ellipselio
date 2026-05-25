@@ -1,0 +1,6 @@
+<map id="ellipselio::MappingNode::MappingNode" name="ellipselio::MappingNode::MappingNode">
+<area shape="rect" id="node1" title="Construct mapping node with ROS 2 options." alt="" coords="5,49,184,90"/>
+<area shape="rect" id="node2" href="$common__lib_8h.html#af5efa9a9ebeaefab95cecd2488a22020" title="Convert container to 3x3 double&#45;precision matrix." alt="" coords="252,5,383,32"/>
+<area shape="rect" id="node3" href="$common__lib_8h.html#ab1af5761d50018c9851b9015cc2f0a69" title="Convert container to double&#45;precision quaternion." alt="" coords="232,56,403,83"/>
+<area shape="rect" id="node4" href="$common__lib_8h.html#a95b398080dcd567deefc5260b97343f5" title="Convert container to 3D double&#45;precision vector." alt="" coords="253,107,382,133"/>
+</map>

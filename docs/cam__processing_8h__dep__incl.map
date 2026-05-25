@@ -1,0 +1,8 @@
+<map id="include/cam_processing.h" name="include/cam_processing.h">
+<area shape="rect" id="node1" title="Camera image processing and color projection to LiDAR points." alt="" coords="211,5,401,32"/>
+<area shape="rect" id="node2" href="$imu__processing_8h.html" title="IMU sensor processing with EKF integration and temporal synchronization." alt="" coords="110,80,297,107"/>
+<area shape="rect" id="node6" href="$cam__processing_8cpp_source.html" title=" " alt="" coords="321,80,499,107"/>
+<area shape="rect" id="node3" href="$map__processing_8h.html" title="Main mapping and localization node for LiDAR&#45;inertial odometry." alt="" coords="5,155,196,181"/>
+<area shape="rect" id="node5" href="$imu__processing_8cpp_source.html" title=" " alt="" coords="220,155,395,181"/>
+<area shape="rect" id="node4" href="$map__processing_8cpp_source.html" title=" " alt="" coords="11,229,190,256"/>
+</map>

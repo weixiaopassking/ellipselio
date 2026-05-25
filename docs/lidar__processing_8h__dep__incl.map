@@ -1,0 +1,6 @@
+<map id="include/lidar_processing.h" name="include/lidar_processing.h">
+<area shape="rect" id="node1" title="LiDAR point cloud processing with vendor&#45;specific support." alt="" coords="109,5,300,32"/>
+<area shape="rect" id="node2" href="$map__processing_8h.html" title="Main mapping and localization node for LiDAR&#45;inertial odometry." alt="" coords="5,80,196,107"/>
+<area shape="rect" id="node4" href="$lidar__processing_8cpp_source.html" title=" " alt="" coords="221,80,399,107"/>
+<area shape="rect" id="node3" href="$map__processing_8cpp_source.html" title=" " alt="" coords="11,155,190,181"/>
+</map>

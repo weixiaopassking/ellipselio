@@ -1,0 +1,12 @@
+<map id="include/common_pcl.h" name="include/common_pcl.h">
+<area shape="rect" id="node1" title="Custom PCL point types for multi&#45;vendor LiDAR support." alt="" coords="281,5,449,32"/>
+<area shape="rect" id="node2" href="$common__lib_8h.html" title="Common type definitions, constants, and utility functions for EllipseLIO." alt="" coords="283,80,448,107"/>
+<area shape="rect" id="node3" href="$cam__processing_8h.html" title="Camera image processing and color projection to LiDAR points." alt="" coords="203,155,394,181"/>
+<area shape="rect" id="node4" href="$imu__processing_8h.html" title="IMU sensor processing with EKF integration and temporal synchronization." alt="" coords="5,229,192,256"/>
+<area shape="rect" id="node5" href="$map__processing_8h.html" title="Main mapping and localization node for LiDAR&#45;inertial odometry." alt="" coords="337,304,527,331"/>
+<area shape="rect" id="node9" href="$lidar__processing_8h.html" title="LiDAR point cloud processing with vendor&#45;specific support." alt="" coords="470,155,661,181"/>
+<area shape="rect" id="node8" href="$cam__processing_8cpp_source.html" title=" " alt="" coords="217,229,394,256"/>
+<area shape="rect" id="node7" href="$imu__processing_8cpp_source.html" title=" " alt="" coords="11,304,186,331"/>
+<area shape="rect" id="node6" href="$map__processing_8cpp_source.html" title=" " alt="" coords="343,379,521,405"/>
+<area shape="rect" id="node10" href="$lidar__processing_8cpp_source.html" title=" " alt="" coords="520,229,699,256"/>
+</map>
