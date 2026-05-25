@@ -1,11 +1,18 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.15)
 project(ellipselio)
 
 cmake_policy(SET CMP0074 NEW)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -fopenmp -fPIC")
+
+option(ROS_JAZZY "Use updated headers and includes for ROS Jazzy" OFF)
+
+if(ROS_JAZZY)
+  message(STATUS "Building with updated headers and includes for ROS Jazzy")
+  add_compile_definitions(ROS_JAZZY)
+endif()
 
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
