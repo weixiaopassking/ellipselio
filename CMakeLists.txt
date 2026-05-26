@@ -1,18 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
-project(ellipselio)
 
-cmake_policy(SET CMP0074 NEW)
+project(ellipselio)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_POLICY_DEFAULT_CMP0074 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0144 NEW)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -fopenmp -fPIC")
-
-option(ROS_JAZZY "Use updated headers and includes for ROS Jazzy" OFF)
-
-if(ROS_JAZZY)
-  message(STATUS "Building with updated headers and includes for ROS Jazzy")
-  add_compile_definitions(ROS_JAZZY)
-endif()
 
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
@@ -43,6 +37,21 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 )
 ament_export_dependencies(rosidl_default_runtime)
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+if(DEFINED rclcpp_VERSION)
+  if(rclcpp_VERSION VERSION_GREATER_EQUAL "2.0.0")
+    set(ROS_JAZZY ON CACHE BOOL "Auto-detected ROS Jazzy (rclcpp >= 2.0)")
+  else()
+    set(ROS_JAZZY OFF CACHE BOOL "Auto-detected ROS Jazzy (rclcpp < 2.0)")
+  endif()
+else()
+  set(ROS_JAZZY OFF CACHE BOOL "Unable to detect rclcpp version; assuming not Jazzy")
+endif()
+
+if(ROS_JAZZY)
+  message(STATUS "Auto-detected ROS Jazzy: enabling updated headers and includes")
+  add_compile_definitions(ROS_JAZZY)
+endif()
 
 set(dependencies
   cv_bridge
