@@ -11,6 +11,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    is_foxy = os.environ.get('ROS_DISTRO') == 'foxy'
     package_path = get_package_share_directory('ellipselio')
     default_config_path = os.path.join(package_path, 'config')
     default_rviz_config_path = os.path.join(
@@ -77,7 +78,8 @@ def generate_launch_description():
     ld.add_action(declare_rviz_cmd)
     ld.add_action(declare_rviz_config_path_cmd)
     ld.add_action(container_name_arg)
-    ld.add_action(container)
+    if not is_foxy:
+        ld.add_action(container)
     ld.add_action(base_launch)
 
     return ld

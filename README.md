@@ -22,7 +22,10 @@
 
 [arXivlink]: http://arxiv.org/abs/2605.21150
 
-## ROS2 Humble and Jazzy
+## ROS2 Foxy, Humble and Jazzy
+
+ROS 2 Foxy build compatibility is experimental. Humble and Jazzy remain the
+primary supported distributions.
 
 ### Build
 
@@ -34,6 +37,27 @@ cd ..
 colcon build --packages-select ellipselio --cmake-args -DCMAKE_BUILD_TYPE=Release --symlink-install
 source ~/colcon_ws/install/setup.bash
 ```
+
+### Foxy compatibility notes
+
+Foxy support is currently limited to build compatibility. The compatibility
+path keeps the Humble/Jazzy behavior unchanged while handling older Foxy
+dependencies:
+
+- Foxy uses `rosidl_target_interfaces()` for generated message type support,
+  while newer ROS 2 distributions can use `rosidl_get_typesupport_target()`.
+- Foxy `image_transport::create_subscription()` does not accept subscription
+  options, so the camera subscription uses the older Foxy signature.
+- Ubuntu 20.04 ships an Eigen version without `.reshaped()`, so equivalent
+  `Eigen::Map` and explicit row-major covariance assignments are used.
+- PCL 1.10 already includes `pcl/common/impl/transforms.hpp` through
+  `pcl/common/transforms.h`, so the duplicate implementation include is
+  avoided.
+- On Foxy, the standalone launch path starts the mapping executable directly
+  instead of loading it through a component container.
+
+The Foxy build may still print PCL/CMake developer warnings, but these warnings
+do not prevent the package from building.
 
 ### Run standalone with a bag file
 

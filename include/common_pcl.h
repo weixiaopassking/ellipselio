@@ -19,7 +19,6 @@
 
 #include <pcl/common/impl/centroid.hpp>
 #include <pcl/common/impl/common.hpp>
-#include <pcl/common/impl/transforms.hpp>
 #include <pcl/impl/point_types.hpp>
 
 /**
