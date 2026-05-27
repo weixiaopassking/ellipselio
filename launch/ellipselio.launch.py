@@ -59,7 +59,7 @@ def generate_launch_description():
 
     ellipse_lio_node = Node(
         package='ellipselio',
-        executable='ellipselio_mapping_node',
+        executable='ellipselio_mapping_mt_node' if is_foxy else 'ellipselio_mapping_node',
         name='ellipselio',
         parameters=[PathJoinSubstitution([config_path, config_file]),
                     {'use_sim_time': use_sim_time}],

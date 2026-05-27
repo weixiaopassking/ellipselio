@@ -101,6 +101,12 @@ PLUGIN "ellipselio::MappingNode"
 EXECUTABLE ellipselio_mapping_node
 )
 
+ament_auto_add_executable(ellipselio_mapping_mt_node
+  src/standalone_mapping_node.cpp
+)
+target_link_libraries(ellipselio_mapping_mt_node ellipselio_mapping)
+ament_target_dependencies(ellipselio_mapping_mt_node ${dependencies})
+
 ament_auto_package(USE_SCOPED_HEADER_INSTALL_DIR INSTALL_TO_SHARE
 launch
 rviz

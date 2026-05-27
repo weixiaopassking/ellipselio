@@ -24,8 +24,8 @@
 
 ## ROS2 Foxy, Humble and Jazzy
 
-ROS 2 Foxy build compatibility is experimental. Humble and Jazzy remain the
-primary supported distributions.
+Humble and Jazzy are the primary supported distributions. Foxy compatibility is
+experimental.
 
 ### Build
 
@@ -38,32 +38,22 @@ colcon build --packages-select ellipselio --cmake-args -DCMAKE_BUILD_TYPE=Releas
 source ~/colcon_ws/install/setup.bash
 ```
 
-### Foxy compatibility notes
-
-Foxy support is currently limited to build compatibility. The compatibility
-path keeps the Humble/Jazzy behavior unchanged while handling older Foxy
-dependencies:
-
-- Foxy uses `rosidl_target_interfaces()` for generated message type support,
-  while newer ROS 2 distributions can use `rosidl_get_typesupport_target()`.
-- Foxy `image_transport::create_subscription()` does not accept subscription
-  options, so the camera subscription uses the older Foxy signature.
-- Ubuntu 20.04 ships an Eigen version without `.reshaped()`, so equivalent
-  `Eigen::Map` and explicit row-major covariance assignments are used.
-- PCL 1.10 already includes `pcl/common/impl/transforms.hpp` through
-  `pcl/common/transforms.h`, so the duplicate implementation include is
-  avoided.
-- On Foxy, the standalone launch path starts the mapping executable directly
-  instead of loading it through a component container.
-
-The Foxy build may still print PCL/CMake developer warnings, but these warnings
-do not prevent the package from building.
-
 ### Run standalone with a bag file
+
+For Humble/Jazzy, publish simulated time from the bag and keep the launch file's
+default `use_sim_time:=true`:
 
 ```sh
 ros2 launch ellipselio ellipselio_standalone.launch.py config_file:=<config_file_name>
-ros2 bag play --clock <imu_rate> <bag_folder> --topics <lidar_topic> <imu_topic>
+ros2 bag play --clock <bag_folder> --topics <lidar_topic> <imu_topic>
+```
+
+For Foxy, `ros2 bag play` may not provide the `--clock` option. In that case,
+run the node with wall time:
+
+```sh
+ros2 launch ellipselio ellipselio_standalone.launch.py config_file:=<config_file_name> use_sim_time:=false
+ros2 bag play <bag_folder> --topics <lidar_topic> <imu_topic>
 ```
 
 ### Included dataset configs
