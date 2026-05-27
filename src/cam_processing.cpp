@@ -16,10 +16,17 @@ CamProcess::CamProcess(CamParams params, rclcpp::Node::SharedPtr node)
   img_start_time_ = rclcpp::Time(0, 0, RCL_ROS_TIME);
   img_end_time_ = rclcpp::Time(0, 0, RCL_ROS_TIME);
 
+#ifdef ROS_FOXY
+  cam_sub_ = image_transport::create_subscription(
+      node_.get(), params_.topic,
+      std::bind(&CamProcess::CamCallback, this, std::placeholders::_1),
+      params_.transport, rmw_qos_profile_sensor_data);
+#else
   cam_sub_ = image_transport::create_subscription(
       node_.get(), params_.topic,
       std::bind(&CamProcess::CamCallback, this, std::placeholders::_1),
       params_.transport, rmw_qos_profile_sensor_data, cam_opt);
+#endif
 }
 
 void CamProcess::CamCallback(

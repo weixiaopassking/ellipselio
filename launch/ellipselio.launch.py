@@ -11,6 +11,7 @@ from launch_ros.actions import ComposableNodeContainer, Node, LoadComposableNode
 from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
+    is_foxy = os.environ.get('ROS_DISTRO') == 'foxy'
     package_path = get_package_share_directory('ellipselio')
     default_config_path = os.path.join(package_path, 'config')
     default_rviz_config_path = os.path.join(
@@ -58,12 +59,11 @@ def generate_launch_description():
 
     ellipse_lio_node = Node(
         package='ellipselio',
-        executable='ellipselio_mapping_node',
+        executable='ellipselio_mapping_mt_node' if is_foxy else 'ellipselio_mapping_node',
         name='ellipselio',
         parameters=[PathJoinSubstitution([config_path, config_file]),
                     {'use_sim_time': use_sim_time}],
         output='screen',
-        prefix=['gdbserver localhost:3000'],
     )
 
     ellipse_lio_comp = ComposableNode(
@@ -90,7 +90,9 @@ def generate_launch_description():
     ld.add_action(declare_rviz_config_path_cmd)
     ld.add_action(container_name_arg)
     ld.add_action(rviz_node)
-    ld.add_action(composable_node)
-    # ld.add_action(ellipse_lio_node)
+    if is_foxy:
+        ld.add_action(ellipse_lio_node)
+    else:
+        ld.add_action(composable_node)
 
     return ld

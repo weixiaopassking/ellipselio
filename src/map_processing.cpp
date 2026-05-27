@@ -2,6 +2,18 @@
 
 namespace ellipselio {
 
+namespace {
+
+Eigen::Matrix<float, 1, 9> FlattenMatrix3(const M3F& matrix) {
+  return Eigen::Map<const Eigen::Matrix<float, 1, 9>>(matrix.data());
+}
+
+M3F Matrix3FromValues(const Eigen::RowVectorXf& values) {
+  return Eigen::Map<const M3F>(values.data());
+}
+
+}  // namespace
+
 bool MappingNode::SyncPackages() {
   double velocity;
   bool got_lidar_data;
@@ -242,7 +254,7 @@ void MappingNode::TensorVotePass1(int old_map_size,
       M3F A_j;
       int map_j = neighbours_[map_i][j];
       ComputeTensorVote(map_i, map_j, &A_j, true);
-      K.row(j) = A_j.reshaped(1, 9);
+      K.row(j) = FlattenMatrix3(A_j);
 
       if (map_j >= old_map_size) continue;
 
@@ -265,7 +277,8 @@ void MappingNode::TensorVotePass1(int old_map_size,
                        [new_neighbours_size_[update_idx_[map_j]]++] = map_i;
       }
     }
-    tensors_p1_[map_i] = K.colwise().sum().reshaped(3, 3);
+    Eigen::RowVectorXf tensor_sum = K.colwise().sum();
+    tensors_p1_[map_i] = Matrix3FromValues(tensor_sum);
 
     filters_[map_i][0] = loop_cnt >= min_neigh;
     if (!filters_[map_i][0]) continue;
@@ -306,10 +319,11 @@ void MappingNode::TensorVotePass1(int old_map_size,
       int map_j = new_neighbours_[i][j];
       neighbours_[map_i][old_size + j] = map_j;
       ComputeTensorVote(map_i, map_j, &A_j, true);
-      K.row(j) = A_j.reshaped(1, 9);
+      K.row(j) = FlattenMatrix3(A_j);
     }
 
-    tensors_p1_[map_i] += K.colwise().sum().reshaped(3, 3);
+    Eigen::RowVectorXf tensor_sum = K.colwise().sum();
+    tensors_p1_[map_i] += Matrix3FromValues(tensor_sum);
 
     filters_[map_i][0] = neighbours_[map_i].size() >= min_neigh;
     if (!filters_[map_i][0]) continue;
@@ -351,14 +365,15 @@ void MappingNode::TensorVotePass2(std::vector<int>& added_idxs,
 
       M3F A_j;
       ComputeTensorVote(map_i, map_j, &A_j, false);
-      K.row(j) = A_j.reshaped(1, 9);
+      K.row(j) = FlattenMatrix3(A_j);
       K_filter(j) = 1;
     }
 
     filter_cnt = K_filter.sum();
     if (filter_cnt < min_neigh) continue;
 
-    tensor_i2 = K.colwise().sum().reshaped(3, 3);
+    Eigen::RowVectorXf tensor_sum = K.colwise().sum();
+    tensor_i2 = Matrix3FromValues(tensor_sum);
     tensor_i2 /= float(filter_cnt);
     ComputeTensorEigen(map_i, &tensor_i2, false);
   }
@@ -627,16 +642,16 @@ void MappingNode::PublishImuOdometry() {
   odom_msg.twist.twist.angular.z = ang_vel_body(2);
 
   Eigen::MatrixXd pose_cov = imu_state.cov.block<6, 6>(0, 0);
-  Eigen::VectorXd pose_cov_vec = pose_cov.reshaped<Eigen::RowMajor>();
   Eigen::MatrixXd twist_cov = Eigen::MatrixXd::Zero(6, 6);
   twist_cov.block<3, 3>(0, 0) = imu_state.cov.block<3, 3>(12, 12);
   twist_cov.block<3, 3>(3, 3) = imu_process_->q_.block<3, 3>(0, 0);
-  Eigen::VectorXd twist_cov_vec = twist_cov.reshaped<Eigen::RowMajor>();
 
 #pragma omp parallel for
   for (int i = 0; i < 36; i++) {
-    odom_msg.pose.covariance[i] = pose_cov_vec(i);
-    odom_msg.twist.covariance[i] = twist_cov_vec(i);
+    int row = i / 6;
+    int col = i % 6;
+    odom_msg.pose.covariance[i] = pose_cov(row, col);
+    odom_msg.twist.covariance[i] = twist_cov(row, col);
   }
   pub_odom_->publish(odom_msg);
 }

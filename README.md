@@ -22,7 +22,10 @@
 
 [arXivlink]: http://arxiv.org/abs/2605.21150
 
-## ROS2 Humble and Jazzy
+## ROS2 Foxy, Humble and Jazzy
+
+Humble and Jazzy are the primary supported distributions. Foxy compatibility is
+experimental.
 
 ### Build
 
@@ -37,9 +40,20 @@ source ~/colcon_ws/install/setup.bash
 
 ### Run standalone with a bag file
 
+For Humble/Jazzy, publish simulated time from the bag and keep the launch file's
+default `use_sim_time:=true`:
+
 ```sh
 ros2 launch ellipselio ellipselio_standalone.launch.py config_file:=<config_file_name>
-ros2 bag play --clock <imu_rate> <bag_folder> --topics <lidar_topic> <imu_topic>
+ros2 bag play --clock <bag_folder> --topics <lidar_topic> <imu_topic>
+```
+
+For Foxy, `ros2 bag play` may not provide the `--clock` option. In that case,
+run the node with wall time:
+
+```sh
+ros2 launch ellipselio ellipselio_standalone.launch.py config_file:=<config_file_name> use_sim_time:=false
+ros2 bag play <bag_folder> --topics <lidar_topic> <imu_topic>
 ```
 
 ### Included dataset configs
@@ -53,6 +67,14 @@ ros2 bag play --clock <imu_rate> <bag_folder> --topics <lidar_topic> <imu_topic>
 | [`config/vlp16_geode.yaml`](config/vlp16_geode.yaml) | [`GEODE Alpha`](https://thisparticle.github.io/geode/) |
 | [`config/os64_geode.yaml`](config/os64_geode.yaml) | [`GEODE Beta`](https://thisparticle.github.io/geode/) |
 | [`config/vlp16_graco.yaml`](config/vlp16_graco.yaml) | [`GRACO`](https://github.com/SYSU-RoboticsLab/GrAco) |
+
+### Foxy RViz examples
+
+Example RViz outputs from the experimental Foxy path:
+
+| GEODE Alpha | Newer College |
+| --- | --- |
+| <img src="docs/assets/foxy_geode_alpha_bridge01.png" width="360" alt="GEODE Alpha RViz output on ROS 2 Foxy" /> | <img src="docs/assets/foxy_newer_college_os64_05.png" width="360" alt="Newer College RViz output on ROS 2 Foxy" /> |
 
 ### Run standalone with live data
 

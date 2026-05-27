@@ -36,17 +36,27 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES std_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)
-rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-if(EXISTS "/opt/ros/jazzy")
-  set(ROS_JAZZY ON CACHE BOOL "Auto-detected ROS Jazzy (/opt/ros/jazzy exists)")
+if(DEFINED ENV{ROS_DISTRO} AND "$ENV{ROS_DISTRO}" STREQUAL "jazzy")
+  set(ROS_JAZZY ON)
 else()
-  set(ROS_JAZZY OFF CACHE BOOL "Auto-detected ROS not Jazzy (/opt/ros/jazzy not found)")
+  set(ROS_JAZZY OFF)
+endif()
+
+if(DEFINED ENV{ROS_DISTRO} AND "$ENV{ROS_DISTRO}" STREQUAL "foxy")
+  set(ROS_FOXY ON)
+else()
+  set(ROS_FOXY OFF)
 endif()
 
 if(ROS_JAZZY)
   message(STATUS "Auto-detected ROS Jazzy: enabling updated headers and includes")
   add_compile_definitions(ROS_JAZZY)
+endif()
+
+if(ROS_FOXY)
+  message(STATUS "Auto-detected ROS Foxy: enabling compatibility code")
+  add_compile_definitions(ROS_FOXY)
 endif()
 
 set(dependencies
@@ -75,14 +85,27 @@ target_include_directories(ellipselio_mapping PUBLIC
   ${OpenCV_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
 )
-target_link_libraries(ellipselio_mapping ${PCL_LIBRARIES} ${PYTHON_LIBRARIES} ${EIGEN3_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES} ${cpp_typesupport_target})
+target_link_libraries(ellipselio_mapping ${PCL_LIBRARIES} ${PYTHON_LIBRARIES} ${EIGEN3_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES})
 
 ament_target_dependencies(ellipselio_mapping ${dependencies})
+
+if(COMMAND rosidl_get_typesupport_target)
+  rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+  target_link_libraries(ellipselio_mapping ${cpp_typesupport_target})
+else()
+  rosidl_target_interfaces(ellipselio_mapping ${PROJECT_NAME} "rosidl_typesupport_cpp")
+endif()
 
 rclcpp_components_register_node(ellipselio_mapping
 PLUGIN "ellipselio::MappingNode"
 EXECUTABLE ellipselio_mapping_node
 )
+
+ament_auto_add_executable(ellipselio_mapping_mt_node
+  src/standalone_mapping_node.cpp
+)
+target_link_libraries(ellipselio_mapping_mt_node ellipselio_mapping)
+ament_target_dependencies(ellipselio_mapping_mt_node ${dependencies})
 
 ament_auto_package(USE_SCOPED_HEADER_INSTALL_DIR INSTALL_TO_SHARE
 launch
